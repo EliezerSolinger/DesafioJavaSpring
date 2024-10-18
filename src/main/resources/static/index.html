@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Projetos</title>
+
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/7867/7867852.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism.min.css" rel="stylesheet">
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .main-content {
+            padding: 15px;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-12 col-md-3 bg-dark text-white sidebar">
+            <div class="position-sticky p-3">
+                <h3 class="text-center"><i class="fa-solid fa-briefcase"></i> Portfólio</h3>
+                <ul class="nav nav-pill flex-column mt-4" id="myTab" role="tablist">
+                    <li class="nav-item ">
+                        <a class=" btn w-100 text-start rounded-0  btn-light active" id="projetos-tab" onclick="reloadProjetosTable()" data-bs-toggle="tab" href="#projetos" role="tab" aria-controls="projetos" aria-selected="true">
+                            <i class="fa-solid fa-folder-open"></i> Projetos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" btn  w-100 text-start  btn-light rounded-0 "  id="membros-tab" onclick="reloadPessoasTable()" data-bs-toggle="tab" href="#membros" role="tab" aria-controls="membros" aria-selected="false">
+                            <i class="fa-solid fa-users"></i> Membros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" btn  w-100 text-start  btn-light rounded-0 "  id="webservice-tab" data-bs-toggle="tab" href="#webservice" role="tab" aria-controls="membros" aria-selected="false">
+                            <i class="fa-solid fa-network-wired"></i> WebService
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="col main-content">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="projetos" role="tabpanel" aria-labelledby="projetos-tab">
+                    <div class="d-flex justify-content-between align-items-center pb-3 mb-2 border-bottom">
+                        <h1 class="h2"><i class="fa-solid fa-folder-plus"></i> Projetos</h1>
+                        <button class="btn btn-primary" onclick="openNewProject()">
+                            <i class="fa-solid fa-plus"></i> Novo Projeto
+                        </button>
+                    </div>
+                    <div> 
+                        <div class="alert alert-info d-flex align-items-center alert-dismissible fade show" role="alert">
+                            <i class="fa-solid fa-circle-info fa-3x me-2"></i>
+                            <div class="small">
+                                <strong>Classificação de Risco:</strong> 
+                                <ul class="mb-0">
+                                    <li><b>Baixo Risco:</b> Orçamento abaixo de R$ 100.000</li>
+                                    <li><b>Médio Risco:</b> Orçamento entre R$ 100.000 e R$ 500.000</li>
+                                    <li><b>Alto Risco:</b> Orçamento acima de R$ 500.000</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="px-3">ID</th>
+                                    <th>Nome</th>
+                                    <th>Gerente</th>
+                                    <th>Status</th>
+                                    <th>Risco</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-projetos">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="membros" role="tabpanel" aria-labelledby="membros-tab">
+                    <div class="d-flex justify-content-between align-items-center pb-3 mb-2 border-bottom">
+                        <h1 class="h2"><i class="fa-solid fa-users"></i> Membros</h1>
+                        <button class="btn btn-outline-secondary" onclick="reloadPessoasTable()">
+                            <i class="fa-solid fa-sync"></i> Recarregar
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="px-3">ID</th>
+                                    <th>Nome</th>
+                                    <th>Cargo</th> 
+                                    <th>CPF</th> 
+                                    <th>Data de nascimento</th> 
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-pessoas">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="webservice" role="tabpanel" aria-labelledby="webservice-tab">
+                    <div class="d-flex justify-content-between align-items-center pb-3 mb-2 border-bottom">
+                        <h1 class="h2"><i class="fa-solid fa-users"></i> Informações do Webservice</h1> 
+                    </div>
+
+                    <div class="container  ">  
+                        <h2>Base URL</h2>
+                        <p><code>http://localhost:8080/api</code></p>
+                
+                        <!-- Accordion -->
+                        <div class="accordion" id="apiAccordion">
+                            
+                            <!-- Pessoa Section -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingPessoa">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePessoa" aria-expanded="true" aria-controls="collapsePessoa">
+                                        Pessoa
+                                    </button>
+                                </h2>
+                                <div id="collapsePessoa" class="accordion-collapse collapse show" aria-labelledby="headingPessoa" data-bs-parent="#apiAccordion">
+                                    <div class="accordion-body">
+                                        
+                                        <h4>1. Editar Pessoa</h4>
+                                        <p><strong>Rota:</strong> <code>/pessoas/{id}</code></p>
+                                        <p><strong>Método:</strong> <code>PUT</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+<pre><code class="language-json">{
+    "nome": "Maria Silva",
+    "dataNascimento": "1985-04-15",
+    "cpf": "987.654.321-00",
+    "funcionario": true,
+    "gerente": false
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Atualiza as informações de uma pessoa com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>2. Listar Pessoas</h4>
+                                        <p><strong>Rota:</strong> <code>/pessoas</code></p>
+                                        <p><strong>Método:</strong> <code>GET</code></p>
+                                        <p><strong>Descrição:</strong> Retorna a lista de todas as pessoas cadastradas.</p>
+                
+                                        <hr>
+                
+                                        <h4>3. Obter Pessoa</h4>
+                                        <p><strong>Rota:</strong> <code>/pessoas/{id}</code></p>
+                                        <p><strong>Método:</strong> <code>GET</code></p>
+                                        <p><strong>Descrição:</strong> Retorna as informações de uma pessoa com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>4. Cadastrar Pessoa</h4>
+                                        <p><strong>Rota:</strong> <code>/pessoas</code></p>
+                                        <p><strong>Método:</strong> <code>POST</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+<pre><code class="language-json">{
+    "nome": "Maria Souza",
+    "dataNascimento": "1985-04-15",
+    "cpf": "987.654.321-00",
+    "funcionario": false,
+    "gerente": true
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Cadastra uma nova pessoa.</p>
+                
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <!-- Projeto Section -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingProjeto">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProjeto" aria-expanded="false" aria-controls="collapseProjeto">
+                                        Projeto
+                                    </button>
+                                </h2>
+                                <div id="collapseProjeto" class="accordion-collapse collapse" aria-labelledby="headingProjeto" data-bs-parent="#apiAccordion">
+                                    <div class="accordion-body">
+                                        
+                                        <h4>1. Adicionar Membro ao Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos/{id}/members</code></p>
+                                        <p><strong>Método:</strong> <code>POST</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+<pre><code class="language-json">{
+    "id": 1
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Adiciona um membro ao projeto com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>2. Remover Membro do Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos/{id}/members</code></p>
+                                        <p><strong>Método:</strong> <code>DELETE</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+<pre><code class="language-json">{
+    "id": 1
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Remove um membro do projeto com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>3. Listar Projetos</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos</code></p>
+                                        <p><strong>Método:</strong> <code>GET</code></p>
+                                        <p><strong>Descrição:</strong> Retorna a lista de todos os projetos cadastrados.</p>
+                
+                                        <hr>
+                
+                                        <h4>4. Obter Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos/{id}</code></p>
+                                        <p><strong>Método:</strong> <code>GET</code></p>
+                                        <p><strong>Descrição:</strong> Retorna as informações de um projeto com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>5. Cadastrar Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos</code></p>
+                                        <p><strong>Método:</strong> <code>POST</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+    <pre><code class="language-json">{
+"nome": "Projeto Alpha",
+"dataInicio": "2024-01-01",
+"dataPrevisaoFim": "2024-12-31",
+"descricao": "Descrição do Projeto Alpha.",
+"status": "PLANEJADO",
+"orcamento": 150000.00
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Cadastra um novo projeto.</p>
+                
+                                        <p><strong>Valores possiveis para status:</strong>  <i class="text-secondary text-small">EM_ANALISE,
+                                            ANALISE_REALIZADA,
+                                            ANALISE_APROVADA,
+                                            INICIADO,
+                                            PLANEJADO,
+                                            EM_ANDAMENTO,
+                                            ENCERRADO,
+                                            CANCELADO</i></p>
+                                        <hr>
+                
+                                        <h4>6. Editar Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos/{id}</code></p>
+                                        <p><strong>Método:</strong> <code>PUT</code></p>
+                                        <p><strong>Exemplo de requisição:</strong></p>
+<pre><code class="language-json">{
+    "nome": "Projeto Alpha",
+    "dataInicio": "2024-01-01T00:00:00.000+00:00",
+    "dataPrevisaoFim": "2024-12-31T00:00:00.000+00:00",
+    "dataFim": "2024-12-31T00:00:00.000+00:00",
+    "descricao": "Descrição do Projeto Alpha.",
+    "status": "PLANEJADO",
+    "orcamento": 150000.0
+}</code></pre>
+                                        <p><strong>Descrição:</strong> Atualiza as informações de um projeto com o ID especificado.</p>
+                
+                                        <hr>
+                
+                                        <h4>7. Deletar Projeto</h4>
+                                        <p><strong>Rota:</strong> <code>/projetos/{id}</code></p>
+                                        <p><strong>Método:</strong> <code>DELETE</code></p>
+                                        <p><strong>Descrição:</strong> Deleta um projeto com o ID especificado.</p>
+                
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="projetoModal" tabindex="-1" aria-labelledby="projetoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projetoModalLabel">
+                    <i class="fa-solid fa-folder-open"></i> <span id="projetoModalTitle"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-projeto" onsubmit="return false">
+                    <input type="hidden" name="id">
+                    <div class="row g-3">
+                        <!-- Nome do Projeto -->
+                        <div class="col-md-12">
+                            <label for="nome" class="form-label">Nome do Projeto</label>
+                            <input type="text" class="form-control" name="nome" required>
+                        </div>
+
+                        <!-- Datas (Início, Previsão de Fim e Fim) -->
+                        <div class="col-md-4">
+                            <label for="dataInicio" class="form-label">Data de Início</label>
+                            <input type="date" class="form-control" name="dataInicio" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="dataPrevisaoFim" class="form-label">Previsão de Fim</label>
+                            <input type="date" class="form-control" name="dataPrevisaoFim" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="dataFim" class="form-label">Data de Fim</label>
+                            <input type="date" class="form-control" name="dataFim">
+                        </div>
+
+                        <!-- Descrição -->
+                        <div class="col-md-12">
+                            <label for="descricao" class="form-label">Descrição</label>
+                            <textarea class="form-control" name="descricao" rows="3" required></textarea>
+                        </div>
+
+                        <!-- Status e Orçamento -->
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" name="status" required>
+                                <option value="EM_ANALISE">Em Análise</option>
+                                <option value="ANALISE_REALIZADA">Análise Realizada</option>
+                                <option value="ANALISE_APROVADA">Análise Aprovada</option>
+                                <option value="INICIADO">Iniciado</option>
+                                <option value="PLANEJADO">Planejado</option>
+                                <option value="EM_ANDAMENTO">Em Andamento</option>
+                                <option value="ENCERRADO">Encerrado</option>
+                                <option value="CANCELADO">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="orcamento" class="form-label">Orçamento ($)</label>
+                            <input type="number" class="form-control" name="orcamento" min="0" step="1" required>
+                        </div>
+
+                        <!-- Gerente Responsável -->
+                        <div class="col-md-12">
+                            <label for="gerentesSelect" class="form-label">Gerente Responsável</label>
+                            <select class="form-select" name="gerente" id="gerentesSelect" required>
+                                <!-- Opções serão carregadas dinamicamente -->
+                            </select>
+                        </div>
+
+                        <!-- Botão de Salvar -->
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa-solid fa-save"></i> Salvar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para Funcionários do Projeto -->
+<div class="modal fade" id="funcionariosModal" tabindex="-1" aria-labelledby="funcionariosModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="funcionariosModalLabel">Membros do Projeto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="table-responsive"> 
+                    <table class="table table-striped table-striped m-0"  >
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="px-3">ID</th>
+                                <th>Nome</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-funcionarios"> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="input-group">
+                    <select class="form-select" id="funcionariosSelect"> 
+                    </select>
+                    <button class="btn btn-success" id="btnAddMember" type="button"><i class="fa fa-user-plus"></i> Adicionar</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="./api.js"></script>
+<script src="./index.js"></script>
+    <!-- Prism.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-json.min.js"></script>
+</body>
+</html>
