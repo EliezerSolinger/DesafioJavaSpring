@@ -3,7 +3,7 @@
 
 ## Descrição
 
-Este projeto é um **Dashboard de Gerenciamento de Projetos** desenvolvido com **HTML**, **JavaScript**, **Bootstrap** no frontend, e integrado a um backend utilizando **Spring Boot**, **Hibernate** e **JPA**. Ele permite criar, editar, visualizar e gerenciar projetos e membros da equipe de forma simples e eficiente, além de classificar os projetos de acordo com o risco orçamentário.
+Este projeto é um **Dashboard de Gerenciamento de Projetos** desenvolvido com **HTML**, **JavaScript**, **Bootstrap** no frontend, e integrado a um backend utilizando **Spring Boot**, **Hibernate** e **JPA**. Ele permite criar, editar, visualizar e gerenciar projetos. O cadastro e a edição de membros da equipe são realizados exclusivamente via API.
 
 ## Funcionalidades
 
@@ -16,7 +16,7 @@ Este projeto é um **Dashboard de Gerenciamento de Projetos** desenvolvido com *
 - **Acompanhamento do status dos projetos**, como "Planejado", "Em Análise", "Em Andamento", entre outros.
   
 ### 2. Gerenciamento de Membros
-- **Cadastro de membros** como funcionários ou gerentes.
+- **Cadastro de membros** como funcionários ou gerentes (via WebService).
 - Associação de membros a projetos.
 - Visualização e remoção de membros dos projetos.
 
@@ -35,7 +35,7 @@ O projeto interage com uma API REST desenvolvida em **Spring Boot** para realiza
   - `PUT /projetos/{id}` - Edita um projeto existente.
   - `DELETE /projetos/{id}` - Remove um projeto.
 
-Para mais detalhes, consulte o código-fonte no arquivo [api.js](./api.js).
+Para mais detalhes, consulte o código-fonte no arquivo api.js na pasta resources.
 
 ## Estrutura do frontend
 
