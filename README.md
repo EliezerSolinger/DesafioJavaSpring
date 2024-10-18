@@ -56,6 +56,7 @@ Para mais detalhes, consulte o código-fonte no arquivo api.js na pasta resource
 ## Como Rodar o Projeto
 
 ### Pré-requisitos
+- **POSTGRESQL** configurado corretamente, com uma database vazia nomeada `desafiojava`
 - **Spring Boot** configurado e rodando na porta `8080`.
 - O projeto deve estar configurado para servir arquivos estáticos da pasta `static`, onde os arquivos **index.html**, **api.js** e **index.js** estão localizados.
 
